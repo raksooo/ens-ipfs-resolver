@@ -35,8 +35,12 @@ class ensIpfsResolver {
   ensToUrl(name) {
     this.ensToIpfsHash(name)
       .then(hash => {
-        let url = 'http://localhost:' + this.ipfsPort + '/ipfs/' + hash
-        console.log(url)
+        tcpp.probe('localhost', this.ipfsPort, (err, available) => {
+          let domain = available ? 'http://localhost:' + this.ipfsPort
+            : 'https://ipfs.io'
+          let url = domain + '/ipfs/' + hash
+          console.log(url)
+        })
       })
   }
 
@@ -74,6 +78,6 @@ class ensIpfsResolver {
 
 let resolver = new ensIpfsResolver()
 resolver.init()
-  .then(resolver.ensToUrl.bind(resolver, 'raksooo.eth'))
+  .then(() => resolver.ensToUrl('raksooo.eth'))
   .catch(() => console.log('An error occured'))
 
