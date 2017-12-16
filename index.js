@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const Web3 = require('web3')
 const namehash = require('eth-ens-namehash')
 const multihash = require('multihashes')
@@ -8,7 +6,7 @@ const tcpp = require('tcp-ping')
 const abi = require('./abi.js')
 const REGISTRAR = '0x314159265dd8dbb310642f98f50c066173c1259b'
 
-class ensIpfsResolver {
+module.exports = class ensIpfsResolver {
   constructor({ ethPort, ipfsPort } = {}) {
     this.ethPort = ethPort || 8545
     this.ipfsPort = ipfsPort || 8080
@@ -77,9 +75,4 @@ class ensIpfsResolver {
     }
   }
 }
-
-let resolver = new ensIpfsResolver()
-resolver.init()
-  .then(() => resolver.ensToUrl('raksooo.eth'))
-  .catch(() => console.error('An error occured'))
 

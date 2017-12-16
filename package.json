@@ -22,6 +22,7 @@
   "author": "Oskar Nyberg (oskar.nyberg@gmail.com)",
   "license": "MIT",
   "dependencies": {
+    "commander": "^2.12.2",
     "eth-ens-namehash": "^2.0.8",
     "multihashes": "^0.4.12",
     "tcp-ping": "^0.1.1",
