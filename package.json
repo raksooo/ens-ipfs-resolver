@@ -1,0 +1,20 @@
+{
+  "name": "ens-ipfs-resolver",
+  "version": "0.0.1",
+  "description": "Content resolver for Ethereum name service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ens",
+    "ethereum",
+    "name",
+    "service",
+    "ipfs",
+    "content",
+    "resolver"
+  ],
+  "author": "Oskar Nyberg (oskar.nyberg@gmail.com)",
+  "license": "MIT"
+}
