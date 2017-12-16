@@ -16,5 +16,10 @@
     "resolver"
   ],
   "author": "Oskar Nyberg (oskar.nyberg@gmail.com)",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "eth-ens-namehash": "^2.0.8",
+    "multihashes": "^0.4.12",
+    "web3": "^1.0.0-beta.26"
+  }
 }
