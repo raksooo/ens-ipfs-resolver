@@ -79,5 +79,5 @@ class ensIpfsResolver {
 let resolver = new ensIpfsResolver()
 resolver.init()
   .then(() => resolver.ensToUrl('raksooo.eth'))
-  .catch(() => console.log('An error occured'))
+  .catch(() => console.error('An error occured'))
 
