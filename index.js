@@ -3,14 +3,29 @@
 const Web3 = require('web3')
 const namehash = require('eth-ens-namehash')
 const multihash = require('multihashes')
+const tcpp = require('tcp-ping')
 
 const abi = require('./abi.js')
-const REGISTRAR = "0x314159265dd8dbb310642f98f50c066173c1259b"
-
+const REGISTRAR = '0x314159265dd8dbb310642f98f50c066173c1259b'
 
 class ensIpfsResolver {
-  constructor() {
-    this.web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/0pzfHdAhsqakqtBk8Hs6"))
+  init() {
+    return new Promise((resolve, reject) => {
+      tcpp.probe('localhost', 8545, (err, available) => {
+        this.web3 = available ? 'http://localhost:8545'
+          : 'https://mainnet.infura.io/0pzfHdAhsqakqtBk8Hs6'
+        resolve()
+      })
+    })
+  }
+
+  set web3(url) {
+    console.log(url)
+    this._web3 = new Web3(new Web3.providers.HttpProvider(url))
+  }
+
+  get web3() {
+    return this._web3
   }
 
   ensToUrl(name) {
@@ -41,9 +56,9 @@ class ensIpfsResolver {
       // Remove 0x prefix
       let hex = contentHash.substring(2)
       // Convert to buffer
-      let buf = multihash.fromHexString(hex)
+      let buffer = multihash.fromHexString(hex)
       // Multihash encode and convert to base58
-      return multihash.toB58String(multihash.encode(buf, 'sha2-256'))
+      return multihash.toB58String(multihash.encode(buffer, 'sha2-256'))
     } else {
       throw new Error()
     }
@@ -51,5 +66,7 @@ class ensIpfsResolver {
 }
 
 let resolver = new ensIpfsResolver()
-resolver.ensToUrl('raksooo.eth')
+resolver.init()
+  .then(resolver.ensToUrl.bind(resolver, 'raksooo.eth'))
+  .catch(() => console.log('An error occured'))
 
