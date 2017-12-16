@@ -20,7 +20,6 @@ class ensIpfsResolver {
   }
 
   set web3(url) {
-    console.log(url)
     this._web3 = new Web3(new Web3.providers.HttpProvider(url))
   }
 
@@ -30,7 +29,10 @@ class ensIpfsResolver {
 
   ensToUrl(name) {
     this.ensToIpfsHash(name)
-      .then(console.log)
+      .then(hash => {
+        let url = "http://localhost:8080/ipfs/" + hash
+        console.log(url)
+      })
   }
 
   ensToIpfsHash(name) {
