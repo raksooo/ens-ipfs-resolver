@@ -15,6 +15,8 @@ class ensIpfsResolver {
   }
 
   init() {
+    if (this.web3) return;
+
     return new Promise((resolve, reject) => {
       tcpp.probe('localhost', this.ethPort, (err, available) => {
         this.web3 = available ? 'http://localhost:' + this.ethPort
