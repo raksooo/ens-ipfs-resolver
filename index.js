@@ -7,10 +7,10 @@ const multihash = require('multihashes')
 const abi = require('./abi.js')
 const REGISTRAR = "0x314159265dd8dbb310642f98f50c066173c1259b"
 
-const web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/0pzfHdAhsqakqtBk8Hs6"))
 
 class ensIpfsResolver {
   constructor() {
+    this.web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/0pzfHdAhsqakqtBk8Hs6"))
   }
 
   ensToUrl(name) {
@@ -20,7 +20,7 @@ class ensIpfsResolver {
 
   ensToIpfsHash(name) {
     let hash = namehash.hash(name)
-    let registrar = new web3.eth.Contract(abi.registrar, REGISTRAR)
+    let registrar = new this.web3.eth.Contract(abi.registrar, REGISTRAR)
 
     return registrar.methods.resolver(hash).call()
       .then(this._addressToContentHash.bind(this, hash))
@@ -31,7 +31,7 @@ class ensIpfsResolver {
     if (address === '0x0000000000000000000000000000000000000000') {
       throw new Error()
     } else {
-      let resolver = new web3.eth.Contract(abi.resolver, address)
+      let resolver = new this.web3.eth.Contract(abi.resolver, address)
       return resolver.methods.content(hash).call()
     }
   }
