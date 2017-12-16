@@ -9,10 +9,15 @@ const abi = require('./abi.js')
 const REGISTRAR = '0x314159265dd8dbb310642f98f50c066173c1259b'
 
 class ensIpfsResolver {
+  constructor({ ethPort, ipfsPort } = {}) {
+    this.ethPort = ethPort || 8545
+    this.ipfsPort = ipfsPort || 8080
+  }
+
   init() {
     return new Promise((resolve, reject) => {
-      tcpp.probe('localhost', 8545, (err, available) => {
-        this.web3 = available ? 'http://localhost:8545'
+      tcpp.probe('localhost', this.ethPort, (err, available) => {
+        this.web3 = available ? 'http://localhost:' + this.ethPort
           : 'https://mainnet.infura.io/0pzfHdAhsqakqtBk8Hs6'
         resolve()
       })
@@ -30,7 +35,7 @@ class ensIpfsResolver {
   ensToUrl(name) {
     this.ensToIpfsHash(name)
       .then(hash => {
-        let url = "http://localhost:8080/ipfs/" + hash
+        let url = 'http://localhost:' + this.ipfsPort + '/ipfs/' + hash
         console.log(url)
       })
   }
