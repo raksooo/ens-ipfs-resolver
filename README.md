@@ -35,7 +35,7 @@ resolver.ensToIpfsHash("raksooo.eth")
 // output: QmWeSMxMWpsrsJdBU6Zqc6DXZEf4WXHkPzBAdmPjmmHUna
 ```
 
-## Binary
+## Executable
 ```
 Usage: ensipfs [options] <domain>
 
