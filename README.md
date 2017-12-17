@@ -42,7 +42,7 @@ Usage: ensipfs [options] <domain>
   Options:
     -e, --eth-rpc-port <n>  
     -i, --ipfs-port <n>     
-    -h, --help              output usage information
+    -h, --help
 ```
 
 ### Example
