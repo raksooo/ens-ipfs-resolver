@@ -15,32 +15,26 @@ module.exports = class ensIpfsResolver {
   init() {
     if (this.web3) return;
 
-    return new Promise((resolve, reject) => {
-      tcpp.probe('localhost', this.ethPort, (err, available) => {
-        this.web3 = available ? 'http://localhost:' + this.ethPort
+    return this._checkPort(this.ethPort)
+      .then(available => {
+        this.gateway = available ? 'http://localhost:' + this.ethPort
           : 'https://mainnet.infura.io/0pzfHdAhsqakqtBk8Hs6'
-        resolve()
       })
-    })
   }
 
-  set web3(url) {
-    this._web3 = new Web3(new Web3.providers.HttpProvider(url))
-  }
-
-  get web3() {
-    return this._web3
+  set gateway(url) {
+    this.web3 = new Web3(new Web3.providers.HttpProvider(url))
   }
 
   ensToUrl(name) {
+    let hash
     return this.ensToIpfsHash(name)
-      .then(hash => {
-        tcpp.probe('localhost', this.ipfsPort, (err, available) => {
-          let domain = available ? 'http://localhost:' + this.ipfsPort
-            : 'https://ipfs.io'
-          let url = domain + '/ipfs/' + hash
-          console.log(url)
-        })
+      .then(_hash => hash = _hash)
+      .then(this._checkPort.bind(this, this.ipfsPort))
+      .then(available => {
+        let domain = available ? 'http://localhost:' + this.ipfsPort
+          : 'https://ipfs.io'
+        return domain + '/ipfs/' + hash
       })
   }
 
@@ -73,6 +67,12 @@ module.exports = class ensIpfsResolver {
     } else {
       return Promise.reject()
     }
+  }
+
+  _checkPort(port) {
+    return new Promise((resolve, reject) => {
+      tcpp.probe('localhost', port, (err, available) => resolve(available))
+    })
   }
 }
 

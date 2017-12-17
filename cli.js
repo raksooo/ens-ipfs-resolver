@@ -15,7 +15,8 @@ program
     let resolver = new ensIpfsResolver(ports)
     resolver.init()
       .then(() => resolver.ensToUrl(domain))
-      .catch(() => console.error('An error occured'))
+      .then(console.log)
+      .catch((e) => console.error('An error occured', e))
   })
 
 program.parse(process.argv)
