@@ -1,6 +1,6 @@
 {
   "name": "ens-ipfs-resolver",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "Content resolver for Ethereum name service",
   "main": "index.js",
   "bin": {

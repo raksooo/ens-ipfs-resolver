@@ -43,13 +43,14 @@ module.exports = class ensIpfsResolver {
     let registrar = new this.web3.eth.Contract(abi.registrar, REGISTRAR)
 
     return registrar.methods.resolver(hash).call()
-      .then(this._addressToContentHash.bind(this, hash))
+      .then(this._addressToContentHash.bind(this, name, hash))
       .then(this._contentHashToIpfsHash)
+      .catch(e => Promise.reject(e.message || e))
   }
 
-  _addressToContentHash(hash, address) {
+  _addressToContentHash(name, hash, address) {
     if (address === '0x0000000000000000000000000000000000000000') {
-      return Promise.reject()
+      return Promise.reject(name + ' is not registered')
     } else {
       let resolver = new this.web3.eth.Contract(abi.resolver, address)
       return resolver.methods.content(hash).call()
@@ -65,7 +66,7 @@ module.exports = class ensIpfsResolver {
       // Multihash encode and convert to base58
       return multihash.toB58String(multihash.encode(buffer, 'sha2-256'))
     } else {
-      return Promise.reject()
+      return Promise.reject("No content hash for domain")
     }
   }
 
