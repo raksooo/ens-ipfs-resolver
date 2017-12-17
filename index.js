@@ -33,7 +33,7 @@ module.exports = class ensIpfsResolver {
   }
 
   ensToUrl(name) {
-    this.ensToIpfsHash(name)
+    return this.ensToIpfsHash(name)
       .then(hash => {
         tcpp.probe('localhost', this.ipfsPort, (err, available) => {
           let domain = available ? 'http://localhost:' + this.ipfsPort
@@ -55,7 +55,7 @@ module.exports = class ensIpfsResolver {
 
   _addressToContentHash(hash, address) {
     if (address === '0x0000000000000000000000000000000000000000') {
-      throw new Error()
+      return Promise.reject()
     } else {
       let resolver = new this.web3.eth.Contract(abi.resolver, address)
       return resolver.methods.content(hash).call()
@@ -71,7 +71,7 @@ module.exports = class ensIpfsResolver {
       // Multihash encode and convert to base58
       return multihash.toB58String(multihash.encode(buffer, 'sha2-256'))
     } else {
-      throw new Error()
+      return Promise.reject()
     }
   }
 }
