@@ -6,7 +6,7 @@ const tcpp = require('tcp-ping')
 const abi = require('./abi.js')
 const REGISTRAR = '0x314159265dd8dbb310642f98f50c066173c1259b'
 
-module.exports = class ensIpfsResolver {
+module.exports = class EnsIpfsResolver {
   constructor({ ethPort, ipfsPort } = {}) {
     this.ethPort = ethPort || 8545
     this.ipfsPort = ipfsPort || 8080
@@ -74,6 +74,12 @@ module.exports = class ensIpfsResolver {
     return new Promise((resolve, reject) => {
       tcpp.probe('localhost', port, (err, available) => resolve(available))
     })
+  }
+
+  static resolve(name, settings) {
+    let resolver = new EnsIpfsResolver(settings)
+    return resolver.init()
+      .then(resolver.ensToUrl.bind(resolver, name))
   }
 }
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const program = require('commander')
-const ensIpfsResolver = require('./index')
+const EnsIpfsResolver = require('./index')
 
 program
   .option('-e, --eth-rpc-port <n>')
@@ -12,9 +12,7 @@ program
       ethPort: options.ethRpcPort,
       ipfsPort: options.ipfsPort
     }
-    let resolver = new ensIpfsResolver(ports)
-    resolver.init()
-      .then(() => resolver.ensToUrl(domain))
+    EnsIpfsResolver.resolve(domain)
       .then(console.log)
       .catch(e => console.error('An error occured:', e))
   })
